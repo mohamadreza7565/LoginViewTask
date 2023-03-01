@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:loginuitask/data/model/error.dart';
 import 'package:loginuitask/data/model/login.dart';
 
-import '../BaseDataState.dart';
+import '../base_api_data_state.dart';
 
 class HttpClient {
   static Dio instance =
@@ -10,29 +10,12 @@ class HttpClient {
 }
 
 
-Future<Result<Login>> login(String phoneNumber) async {
-
-  try {
-
-    final response = await HttpClient.instance
-        .post('/auth/login', data: {'phoneNumber': phoneNumber});
-
-    final result = Login.fromJson(response.data["data"]);
-
-    return Success(
-      result,
-    );
-  } catch (e) {
-    return handleError(e);
-  }
-}
-
 
 Error<Login> handleError(Object e) {
   if (e is DioError) {
-    if(e.response==null){
+    if (e.response == null) {
       return Error(ErrorModel(0, ["Error"], "Error"));
-    }else{
+    } else {
       final error = ErrorModel.fromJson(e.response!.data["error"]);
       return Error(error);
     }
@@ -40,3 +23,4 @@ Error<Login> handleError(Object e) {
     return Error(ErrorModel(0, ["Error"], "Error"));
   }
 }
+
